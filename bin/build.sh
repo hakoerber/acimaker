@@ -18,7 +18,7 @@ if [[ "$1" == "all" ]] ; then
 fi
 
 source "$_basedir"/defaults.sh
-source "$_basedir"/recipes/"$1"/info.sh
+source "$_basedir"/recipes/"$1"
 
 INSTALLROOT="$_basedir"/"$INSTALLROOT"/"$1"
 YUMDBDIR="$_basedir"/"$YUMDBDIR"/"$1"
