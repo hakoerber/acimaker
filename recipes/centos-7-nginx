@@ -4,10 +4,6 @@ USER=
 GROUP=
 
 PACKAGES=(
-basesystem
-filesystem
-bash
-setup
 nginx
 )
 
