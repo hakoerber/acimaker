@@ -18,6 +18,28 @@ fi
 source "$_basedir"/defaults.sh
 source "$_basedir"/recipes/"$1"
 
+# check dependencies recursively
+_deps=()
+set +o nounset
+while : ; do
+    if [[ "$BASE" ]] ; then
+        _deps+=("$BASE")
+        _base="$BASE"
+        BASE=""
+        source "$_basedir"/recipes/"$_base"
+    else
+        break
+    fi
+done
+set -o nounset
+
+# walk dependecy tree backwards and source all files
+for (( i=(${#_deps[@]} - 1) ; i >= 0 ; i-- )) ; do
+    _base="${_deps[$i]}"
+    source "$_basedir"/recipes/"$_base"
+done
+source "$_basedir"/recipes/"$1"
+
 INSTALLROOT="$(readlink -m "$_basedir"/"$INSTALLROOT"/"$1")"
 CACHEDIR="$(readlink -m "$_basedir"/"$CACHEDIR"/"$RELEASEVER")"
 OUTDIR="$(readlink -m "$_basedir"/"$OUTDIR")"

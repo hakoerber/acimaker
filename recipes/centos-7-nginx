@@ -10,6 +10,6 @@ nginx
 RUN=(
 )
 
-REQUIRE=(
+BASE=(
 centos-7-base
 )
