@@ -7,16 +7,17 @@ set -o nounset
 _basedir="$(readlink -m "$(dirname "$0")"/..)"
 
 if [[ "$1" == "all" ]] ; then
-    for recipe in "$_basedir"/recipes/* ; do
-        name="$(basename "$recipe")"
+    for recipe in "$_basedir"/recipes/*.recipe ; do
+        name="$(basename "${recipe%.*}")"
         echo "Building $name"
         "$0" "$name"
     done
     exit 0
 fi
 
+_recipe="$_basedir"/recipes/"$1".recipe
 source "$_basedir"/defaults.sh
-source "$_basedir"/recipes/"$1"
+source "$_recipe"
 
 # check dependencies recursively
 _deps=()
@@ -26,7 +27,7 @@ while : ; do
         _deps+=("$BASE")
         _base="$BASE"
         BASE=""
-        source "$_basedir"/recipes/"$_base"
+        source "$_basedir"/recipes/"$_base".recipe
     else
         break
     fi
@@ -36,9 +37,9 @@ set -o nounset
 # walk dependecy tree backwards and source all files
 for (( i=(${#_deps[@]} - 1) ; i >= 0 ; i-- )) ; do
     _base="${_deps[$i]}"
-    source "$_basedir"/recipes/"$_base"
+    source "$_basedir"/recipes/"$_base".recipe
 done
-source "$_basedir"/recipes/"$1"
+source "$_recipe"
 
 INSTALLROOT="$(readlink -m "$_basedir"/"$INSTALLROOT"/"$1")"
 CACHEDIR="$(readlink -m "$_basedir"/"$CACHEDIR"/"$RELEASEVER")"

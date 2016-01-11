@@ -9,6 +9,11 @@ basesystem
 filesystem
 bash
 setup
+salt-minion
+iproute
+iputils
+curl
+nmap-ncat
 )
 
 RUN=(
